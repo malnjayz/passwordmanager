@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    image: maln/passwordmanager
+    env_file:
+      - .env
+    build:
+      context: data/app
+    ports:
+      - "5000:5000"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.28-oracle
+    env_file:
+      - .env
+    volumes:
+      - ./data/db/mysql:/var/lib/mysql
+      - ./data/db/config/skip-binlog.cnf:/etc/mysql/conf.d/skip-binlog.cnf:ro
+    networks:
+      - backend
+
+networks:
+  frontend: {}
+  backend: {}
